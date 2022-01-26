@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue</title>
+	<style>
+		body {
+			margin:  5%;
+			font-family: 'Quicksand', sans-seri;f
+		}
+
+		.active {
+			background: red;
+			border: 0;
+			padding: 5px;
+		}
+	</style>
+</head>
+<body>
+<div id="app">
+<header-component name="Fauzan Alghifari" image="img/vue.png"></header-component>
+	<main>
+		<kelas v-bind:items="kelas" v-bind:input="kelasbaru" v-on:hapuskelas="hapuskelas"></kelas>
+		<home></home>
+	</main>
+<footer-component></footer-component>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+<script>
+	const Home = {
+		template: '<div>Home</div>'
+	}
+	Vue.component('header-component',{
+		props: ['name', 'image'],
+		template: `
+			<header>
+				<img :src="image" width="300">
+				<p>{{ 'Hello, ' +name}}</p>
+			</header>
+		`,
+		data: function(){
+			return {
+				pesan: 'Hello World'
+			}
+		}
+	})
+
+	Vue.component('footer-component',{
+		template: `
+			<footer id="footer">
+				<p>Copyright 2021</p>
+			</footer>	
+		`
+	})
+
+	Vue.component('kelas',{
+		props: ['items', 'input'],
+		template: `
+		<div>
+			<h3>Tambah data</h3>
+				<p><input type="text" name="#" placeholder="Masukkan data" v-on:keyup.enter="submit" v-model="input"></p>
+			<hr>
+			<h3>Daftar Kelas ({{ items.length }})</h3>
+				<template v-if="items.length">
+					<li v-for="(item, index) of items">{{ index+1 }}. {{ item }}
+					<a href="" v-on:click.prevent="$emit('hapuskelas')">Hapus</a>
+					</li>
+				</ul>
+				</template>
+				<li v-else>Data tidak tersedia </li>
+		</div>
+		`, 
+		data: function(){
+			return {
+
+			}
+		},
+		methods: { 
+			submit: function(inputevent){
+				let text = inputevent.target.value
+				this.kelas.unshift(this.kelasbaru)
+				this.kelasbaru = ""
+			}
+		}
+	})
+	
+	const vm = new Vue({
+		el: '#app',
+		components: {
+			'home' : Home
+		},
+		data: {
+				kelas: ['Kelas 1', 'Kelas 2', 'Kelas 3'],
+				kelasbaru: ""	
+		},
+		methods: {
+			hapuskelas: function(index){
+				this.kelas.splice(index, 1)
+
+				}
+			},
+		computed: {
+		}
+	})
+</script>
+</body>
+</html>
